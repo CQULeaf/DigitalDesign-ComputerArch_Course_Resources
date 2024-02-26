@@ -1,4 +1,4 @@
-# DigitalDesign-ComputerArch_Course_Resources
+# Digital Design & Computer Architecture Odyssey: Spring 2023
 
 Diving Deep into Digital Design &amp; Comp Arch Spring 2023 - My exploration of digital circuits and computer architecture, from the ground up. Follow my journey as I decode the design of modern microprocessors and embrace the hardware/software symphony!
 
@@ -36,4 +36,4 @@ And through this exploration, we aim to:
 
 Whether you're a fellow traveler, an experienced guide, or just curious about the world of computer architecture, I welcome your insights, feedback, and camaraderie. Feel free to open an issue, suggest improvements, or share your own stories of digital design and architecture.
 
-Thank you for joining me on this exploratory voyage through the realms of digital design and computer architecture. Together, let's unlock the secrets of computing platforms, one circuit at a time!
+**Thank you for joining me on this exploratory voyage through the realms of digital design and computer architecture. Together, let's unlock the secrets of computing platforms, one circuit at a time!**
