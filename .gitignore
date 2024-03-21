@@ -1,0 +1,51 @@
+# LaTeX generated files to ignore
+*.aux
+*.lof
+*.log
+*.lot
+*.fls
+*.out
+*.toc
+*.fmt
+*.fot
+*.cb
+*.cb2
+*.lb
+*.bbl
+*.blg
+*.brf
+*.ent
+*.fff
+*.ttt
+*.ops
+*.lop
+*.synctex.gz
+*.alg
+*.acr
+*.glg
+*.glo
+*.gls
+*.ist
+*.acn
+*.fdb_latexmk
+*.nav
+*.pre
+*.snm
+*.vrb
+*.dvi
+*.ps
+*.thm
+*.idx
+*.ilg
+*.ind
+*.tdo
+# Exclude .pdf files if you don't want to track them
+# *.pdf
+# Exclude TeXstudio project files
+*.synctex(busy)
+*.synctex.gz(busy)
+*.pdfsync
+# Exclude VSCode project files
+*.code-workspace
+# Exclude output directory
+/out/
