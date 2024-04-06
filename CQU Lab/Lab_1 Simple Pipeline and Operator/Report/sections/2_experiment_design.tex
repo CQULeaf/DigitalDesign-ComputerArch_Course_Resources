@@ -4,7 +4,7 @@
 实现一个计算逻辑单元，对数据进行基本的操作并在数码管上直观的显示
 \subsubsection{接口定义}
 \begin{table}[htp]
-	\caption{接口定义模版}\label{tab:signaldef1}
+	\caption{接口定义}\label{tab:signaldef1}
 	\begin{center}
 		\begin{tabular}{|l|l|l|p{6cm}|}
 		\hline
@@ -31,7 +31,7 @@
 将数据位数比较长的数分为多个阶段进行求解，从而提升整体运算速度
 \subsubsection{接口定义}
 \begin{table}[htp]
-	\caption{接口定义模版}\label{tab:signaldef2}
+	\caption{接口定义}\label{tab:signaldef2}
 	\begin{center}
 		\begin{tabular}{|l|l|l|p{6cm}|}
 		\hline
@@ -49,3 +49,4 @@
 \end{table}
 	
 \subsubsection{逻辑控制}
+整体分为四个阶段，每个阶段原理类似，选取阶段1进行解释，三种情况，rst为1时数据设置为0，stop为1时数据不做处理，对cin\_a和cin\_b的前两位进行操作，同时将cin\_a和b的剩下几位赋值给surA1和B1，剩下几个同理，最终可以得到8位数字的运算结果。
