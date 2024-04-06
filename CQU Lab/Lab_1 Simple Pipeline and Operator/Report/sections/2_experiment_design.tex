@@ -1,26 +1,51 @@
 \section{实验设计}
-\textcolor{red}{这一节，主要描述各个模块的功能、接口、逻辑控制方法（状态机控制方法）等。(红字为内容说明，请删除)}
 \subsection{ALU}\label{sub:alu}
 \subsubsection{功能描述}
-\textcolor{red}{简单描述实现的功能即可，一句话亦可(红字为内容说明，请删除)}
+实现一个计算逻辑单元，对数据进行基本的操作并在数码管上直观的显示
 \subsubsection{接口定义}
-\textcolor{red}{接口定义请使用表格，需要包括\textbf{接口信号名、方向、宽度、含义}(红字为内容说明，请删除)}
-
 \begin{table}[htp]
-\caption{接口定义模版}\label{tab:signaldef}
-\begin{center}
-	\begin{tabular}{|l|l|l|p{6cm}|}
-	\hline
-	\textbf{信号名} & \textbf{方向} & \textbf{位宽} & \textbf{功能描述}\\ \hline \hline
-	valid			& Output& 1-bit & If CPU stopped or any exception happens, valid signal is set to 0.\\ 
-	\hline
-	\end{tabular}
-\end{center}
-\end{table}
+	\caption{接口定义模版}\label{tab:signaldef1}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{6cm}|}
+		\hline
+		\textbf{信号名} & \textbf{方向} & \textbf{位宽} & \textbf{功能描述}\\ \hline \hline
+		ans		& output	& 32-bit	& ALU的结果输出。\\ \hline
+		num1	& input		& 8-bit		& 计算操作数。\\ \hline
+		num2	& input		& 32-bit	& 第二个计算操作数。\\ \hline
+		op		& input		& 3-bit		& 多位选择器的选择数，不同数字对应着对Input进行不同的操作。\\ \hline
+		clk		& input		& 1-bit		& 时钟信号。\\ \hline
+		reset	& input		& 1-bit		& 复位信号。\\ \hline
+		s		& input		& 32-bit	& ALU计算结果。\\ \hline
+		seg		& output	& 7-bit		& Seg7输出，七段数码管显示的数字。\\ \hline
+		ans		& output	& 8-bit		& 控制哪个管子亮。\\ \hline
+		sw		& input		& 3-bit		& op信号。\\ \hline
+		ins		& input		& 8-bit		& Num1信号。\\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}		
 
 \subsubsection{逻辑控制}
-\textcolor{red}{逻辑控制部分仅需要写清重点控制逻辑，或自行添加的优化逻辑(红字为内容说明，请删除)}
+主要分为四个文件，ALU为核心部分，输入数据num1和num2并根据op对数据进行计算，ALU\_top为顶层文件，将所有文件功能串联起来从而实现功能，display利用时间clk并对之进行计数，从而在不同时间里让不同的管子输出alu\_result的不同位数的结果，seg7为七段数码管的控制文件根据display的din实现不同的dout
 \subsection{有阻塞4级8bit全加器}\label{sub:ctl}
 \subsubsection{功能描述}
+将数据位数比较长的数分为多个阶段进行求解，从而提升整体运算速度
 \subsubsection{接口定义}
+\begin{table}[htp]
+	\caption{接口定义模版}\label{tab:signaldef2}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{6cm}|}
+		\hline
+		\textbf{信号名} & \textbf{方向} & \textbf{位宽} & \textbf{功能描述}\\ \hline \hline
+		cin\_a	& input	& 8-bit	& 要进行计算的8位数据。\\ \hline
+		cin\_b	& input	& 8-bit	& 要进行计算的另一组8位数据。\\ \hline
+		rst		& input	& 1-bit	& 复位信号。\\ \hline
+		clk		& input	& 1-bit	& 时钟信号。\\ \hline
+		stop	& input	& 1-bit	& 实现对流水线的阻塞。\\ \hline
+		c\_in	& input	& 1-bit	& 模拟最开始的进位。\\ \hline
+		c\_out	& output	& 1-bit	& 进位输出。\\ \hline
+		sum		& output	& 8-bit	& 最终结果。\\ \hline
+		\end{tabular}
+	\end{center}
+\end{table}
+	
 \subsubsection{逻辑控制}
