@@ -21,40 +21,39 @@
 
 
 module spa_sim( );
-    reg [7:0] cin_a, cin_b;
+    reg [31:0] cin_a, cin_b;
     reg rst, clk, stop, c_in;
     wire c_out;
-    wire [7:0] sum;
+    wire [31:0] sum;
 
     initial begin
         clk = 1;
         rst = 0;
         stop = 0;
+        cin_a = 32'h0000_0000;
+        cin_b = 32'h0000_0000;
         c_in = 0;
-        cin_a = 8'h00;
-        cin_b = 8'h00;
 
-        @(posedge clk) cin_a = 8'h00; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h01; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h02; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h03; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h04; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h08; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) cin_a = 8'h10; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) cin_a = 8'h20; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) stop = 1; cin_a = 8'h40; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) cin_a = 8'h80; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) stop = 0; cin_a = 8'h81; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h82; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h83; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) cin_a = 8'h84; cin_b = 8'h01; c_in = 0;
-        @(posedge clk) rst = 1; cin_a = 8'h88; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) rst = 0; cin_a = 8'h90; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) cin_a = 8'hA0; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) cin_a = 8'hB0; cin_b = 8'h01; c_in = 1;
-        @(posedge clk) cin_a = 8'hC0; cin_b = 8'h01; c_in = 1;
+        @(posedge clk) cin_a = 32'h0000_0000;cin_b=32'h0000_0000;c_in=1'b0;
+        @(posedge clk) cin_a = 32'h0000_0000;cin_b=32'h0000_0000;c_in=1'b0;
+        @(posedge clk) cin_a = 32'h0000_0001;cin_b=32'h0000_0001;c_in=1'b0;
+        @(posedge clk) cin_a = 32'h0000_0010;cin_b=32'h0000_0001;c_in=1'b0;
+        @(posedge clk) cin_a = 32'h0000_0100;cin_b=32'h0000_0001;c_in=1'b0;
+        @(posedge clk) cin_a = 32'h0000_1000;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h0001_0000;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h0010_0000;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) stop=1;cin_a = 32'h0100_0000;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_0001;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) stop=0;cin_a = 32'h1000_1111;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_0001;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_0001;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_0001;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) rst=1;cin_a = 32'h1000_0001;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_0011;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_1011;cin_b=32'h0000_0001;c_in=1'b1;
+        @(posedge clk) cin_a = 32'h1000_0111;cin_b=32'h0000_0001;c_in=1'b1;
         repeat(10) @(posedge clk);
-        $finish;
+        $finish;       
     end
 
     always #5 clk = ~clk;

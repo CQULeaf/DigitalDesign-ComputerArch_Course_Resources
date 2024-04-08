@@ -31,22 +31,22 @@
 
 \begin{lstlisting}[language=Verilog]
     module stallable_pipeline_adder(
-        input [7:0] cin_a, cin_b,
+        input [31:0] cin_a, cin_b,
         input rst, clk, stop, c_in,
         output reg c_out,
-        output reg [7:0] sum
+        output reg [31:0] sum
     );
     
     reg cout1, cout2, cout3, cout4;
     
-    reg [1:0] sum1;
-    reg [3:0] sum2;
-    reg [5:0] sum3;
-    reg [7:0] sum4;
+    reg [7:0] sum1;
+    reg [15:0] sum2;
+    reg [23:0] sum3;
+    reg [31:0] sum4;
     
-    reg [5:0] surA1, surB1;
-    reg [3:0] surA2, surB2;
-    reg [1:0] surA3, surB3;
+    reg [23:0] surA1, surB1;
+    reg [15:0] surA2, surB2;
+    reg [7:0] surA3, surB3;
     
     // Stage 1
     always @(posedge clk) begin
@@ -66,9 +66,9 @@
         end
         else
         begin
-            {cout1, sum1} = cin_a[1:0] + cin_b[1:0] + c_in;
-            surA1 <= cin_a[7:2];
-            surB1 <= cin_b[7:2];
+            {cout1, sum1} = cin_a[7:0] + cin_b[7:0] + c_in;
+            surA1 <= cin_a[31:8];
+            surB1 <= cin_b[31:8];
         end
     end
     
@@ -90,10 +90,10 @@
         end
         else
         begin
-            {cout2, sum2[3:2]} = surA1[1:0] + surB1[1:0] + cout1;
-            sum2[1:0] <= sum1; 
-            surA2 <= surA1[5:2];
-            surB2 <= surB1[5:2];
+            {cout2, sum2[15:7]} = surA1[7:0] + surB1[7:0] + cout1;
+            sum2[7:0] <= sum1; 
+            surA2 <= surA1[23:8];
+            surB2 <= surB1[23:8];
         end
     end 
     
@@ -115,10 +115,10 @@
         end
         else
         begin
-            {cout3, sum3[5:4]} = surA2[1:0] + surB2[1:0] + cout2;
-            sum3[3:0] <= sum2;
-            surA3 <= surA2[3:2];
-            surB3 <= surB2[3:2];
+            {cout3, sum3[23:16]} = surA2[7:0] + surB2[7:0] + cout2;
+            sum3[15:0] <= sum2;
+            surA3 <= surA2[15:8];
+            surB3 <= surB2[15:8];
         end
     end
     
@@ -136,8 +136,8 @@
         end
         else
         begin
-            {cout4, sum4[7:6]} = surA3[1:0] + surB3[1:0] + cout3;
-            sum4[5:0] <= sum3;
+            {cout4, sum4[31:24]} = surA3[7:0] + surB3[7:0] + cout3;
+            sum4[23:0] <= sum3;
         end
     end
     
