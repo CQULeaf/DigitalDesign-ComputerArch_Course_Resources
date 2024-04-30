@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2024/04/16 20:16:20
+// Create Date: 2024/04/28 21:06:43
 // Design Name: 
-// Module Name: mux2
+// Module Name: sign_extend
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,18 +20,11 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module mux2(
-    input [31:0] option1,
-    input [31:0] option2,
-    input select,
-    output reg [31:0] data
-    );
-    
-always @ (*) begin
-    case (select) 
-        1'b0: data = option1;
-        1'b1: data = option2;
-    endcase
-end
+module sign_extend(
+    input [15:0] sign,
+    output [31:0] sign_extend
+);
+
+assign sign_extend = { {16{sign[15]}} , sign};
 
 endmodule

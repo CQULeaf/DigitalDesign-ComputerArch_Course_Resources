@@ -29,12 +29,14 @@ module mips(
 	input wire[31:0] readdata 
     );
 	
-	wire memtoreg,alusrc,regdst,regwrite,jump,pcsrc,zero,overflow;
+	wire memtoreg,alusrc,regdst,regwrite,jump,pcsrc,zero;
 	wire[2:0] alucontrol;
 
-	controller c(instr[31:26],instr[5:0],zero,memtoreg,
-		memwrite,pcsrc,alusrc,regdst,regwrite,jump,alucontrol);
-	datapath dp(clk,rst,memtoreg,pcsrc,alusrc,
-		regdst,regwrite,jump,alucontrol,overflow,zero,pc,instr,aluout,writedata,readdata);
+	controller c(.op(instr[31:26]),.funct(instr[5:0]),.zero(zero),.memtoreg(memtoreg),.memwrite(memwrite),
+	.pcsrc(pcsrc),.alusrc(alusrc),.regdst(regdst),.regwrite(regwrite),.jump(jump),.alucontrol(alucontrol));
 	
+	datapath dp(.clk(clk), .rst(rst), .memtoreg(memtoreg), .memwrite(memwrite), .pcsrc(pcsrc), .alusrc(alusrc),
+	.regdst(regdst), .regwrite(regwrite), .jump(jump),.alucontrol(alucontrol),.pc(pc), 
+	.instr(instr),.aluout(aluout), .writedata(writedata),.readdata(readdata));
+
 endmodule

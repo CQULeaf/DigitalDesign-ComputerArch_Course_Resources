@@ -21,21 +21,17 @@
 
 
 module pc(
-    input reset, clk,
-    output reg reginst_ce,
+    input clk, rst,
+    input wire [31:0] newPC,
     output reg [31:0] pc
 );
-    reg [31:0] count;
-    initial count = 0;
 
-    always @(posedge clk) begin
-        if (reset) begin
-            count <= 0;
-            reginst_ce <= 0;
+    always @(posedge clk or posedge rst) begin
+        if (rst) begin
+            pc <= 32'h0;
         end else begin
-            count <= count + 4;
-            reginst_ce <= 1;
-            pc <= count;
+            pc <= newPC;
         end
     end
+
 endmodule
