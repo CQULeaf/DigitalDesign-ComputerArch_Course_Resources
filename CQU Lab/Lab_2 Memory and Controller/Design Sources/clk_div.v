@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2024/04/16 23:36:27
+// Create Date: 2024/04/30 18:58:14
 // Design Name: 
-// Module Name: pc
+// Module Name: clk_div
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -20,21 +20,25 @@
 //////////////////////////////////////////////////////////////////////////////////
 
 
-module pc(
-    input clk, rst,
-    input wire [31:0] newPC,
-    output reg [31:0] pc,
-    output reg inst_ce
-);
+module clk_div(
+    input clk_in,
+    input rst,
+    output reg hz
+    );
 
-    always @(posedge clk) begin
+    reg [27:0] count;
+    always @(posedge clk_in or posedge rst) begin
         if (rst) begin
-            pc <= 32'h0;
-            inst_ce <= 1'b0;
+            hz <= 0;
+            count <= 0;
         end else begin
-            pc <= newPC;
-            inst_ce <= 1'b1;
+            if (count >= 27'd99_999_999) begin
+                hz <= ~hz;
+                count <= 0;
+            end else begin
+                count <= count + 1;
+            end
         end
+        
     end
-
 endmodule

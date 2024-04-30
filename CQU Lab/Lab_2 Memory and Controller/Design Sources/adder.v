@@ -22,27 +22,29 @@
 
 module adder(
     input [31:0] pc,
-    input [31:0] a_in,
     output reg [31:0] pc_next,
     input clk,
-    input reset,
-    input reginst_ce
+    input rst,
+    input inst_ce
 );
+
+    localparam INCREMENT = 32'h4;
     
     always @(posedge clk) begin
-        if (reset) begin
+        if (rst) begin
             pc_next <= pc;
-        end else if (reginst_ce) begin  // 为1
-            pc_next <= pc + a_in;
+        end else if (inst_ce) begin  // 为1
+            pc_next <= pc + INCREMENT;
         end else begin
             pc_next <= pc;
         end
     end
 
-    pc u(
+    pc pc_update(
         .clk(clk),
-        .reset(reset),
-        .reginst_ce(reginst_ce),
-        .pc(pc)
+        .rst(rst),
+        .inst_ce(inst_ce),
+        .pc(pc),
+        .newPC(pc_next)
     );
 endmodule

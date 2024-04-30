@@ -21,15 +21,15 @@
 
 
 module display(
-    input wire clk,reset,
+    input wire clk,rst,
     input wire [31:0]s,
     output wire [6:0]seg,
     output reg [7:0]ans
     );
     reg [20:0]count;
     reg [4:0]digit; 
-    always@(posedge clk,posedge reset)
-    if(reset)  
+    always@(posedge clk,posedge rst)
+    if(rst)  
         count = 0;
     else 
         count = count + 1;
