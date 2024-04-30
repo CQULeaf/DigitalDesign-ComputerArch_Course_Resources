@@ -1,0 +1,44 @@
+%!TEX program = xelatex
+\documentclass[cn,normal,black,11pt]{elegantnote}
+\usepackage{wasysym}
+\usepackage{multirow}
+% \title{ElegantNote：一个优美的 \LaTeX{} 笔记模板}
+
+% \author{\href{https://ddswhu.me/}{邓东升}}
+% \institute{\href{https://elegantlatex.org/}{Elegant\LaTeX{} Program}}
+% \version{2.20}
+% \date{\today}
+
+
+\begin{document}
+\newcommand{\stuname}{叶旭航，解吴雪，李佳玲}
+\newcommand{\stuclass}{2022级计算机科学与技术03班/01班/06班}
+\newcommand{\expname}{实验四 简单五级流水线CPU}
+\newcommand{\expdate}{2024 年 4 月 30 日}
+\newcommand{\reportdate}{\number\year 年 \number\month 月 \number\day 日}
+\newcommand{\exproom}{DS1410}
+\newcommand{\stugrade}{优秀/良好/中等}
+\newcommand{\teacher}{冯永}
+% \newcommand{}{}
+
+% \maketitle
+% logo
+% \centerline{\includegraphics[width=0.25\textwidth]{logo.pdf}}
+
+\setlist[itemize]{label=$\circ$}
+
+\input{sections/0_score_info.tex}
+
+\newpage
+
+\input{sections/1_experiment_content.tex}
+
+\input{sections/2_experiment_design.tex}
+
+\input{sections/3_experiment_note.tex}
+
+\input{sections/4_experiment_result.tex}
+
+\input{sections/5_code_appendix.tex}
+
+\end{document}
