@@ -27,16 +27,8 @@ module top(
     );
 	// wire clk;
 	wire[31:0] pc,instr,readdata;
-
-	//   clk_div instance_name(
- //    	// Clock out ports
-	//     .clk_out1(hclk),     // output clk_out1
-	//    // Clock in ports
-	//     .clk_in1(clk)
- //    	); 
-   	
-
+	
 	mips mips(clk,rst,pc,instr,memwrite,dataadr,writedata,readdata);
-	inst_mem imem(clk,pc[7:2],instr);
-	data_mem dmem(clk,memwrite,dataadr,writedata,readdata);
+	inst_mem imem(.clka(~clk), .addra(pc[31:0]), .douta(instr));
+	data_mem dmem(.clka(~clk), .addra(dataadr), .dina(writedata), .douta(readdata), .wea(memwrite));
 endmodule

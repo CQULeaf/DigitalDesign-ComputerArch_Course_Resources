@@ -53,8 +53,10 @@ module Lab2_sim();
         #5 rst = 0;
     end
 
-    always #10 begin
-        $display("pc=%h inst=%h zero=%h memtoreg=%h memwrite=%h pcsrc=%h alusrc=%h regdst=%h regwrite=%h jump=%h alucontrol=%h", pc, inst, zero, memtoreg, memwrite, pcsrc, alusrc, regdst, regwrite, jump, alucontrol);
+    // 在每个时钟周期打印指定的信息
+    always @(posedge clk) begin
+        $display("instruction: 32’h%h, zero: %b, memtoreg: %b, memwrite: %b, pcsrc: %b, alusrc: %b, regdst: %b, regwrite: %b, jump: %b, alucontrol: %b",
+                 inst, zero, memtoreg, memwrite, pcsrc, alusrc, regdst, regwrite, jump, alucontrol);
     end
 
 endmodule

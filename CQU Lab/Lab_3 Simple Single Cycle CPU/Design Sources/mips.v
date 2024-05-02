@@ -36,7 +36,7 @@ module mips(
 	.pcsrc(pcsrc),.alusrc(alusrc),.regdst(regdst),.regwrite(regwrite),.jump(jump),.alucontrol(alucontrol));
 	
 	datapath dp(.clk(clk), .rst(rst), .memtoreg(memtoreg), .memwrite(memwrite), .pcsrc(pcsrc), .alusrc(alusrc),
-	.regdst(regdst), .regwrite(regwrite), .jump(jump),.alucontrol(alucontrol),.pc(pc), 
+	.regdst(regdst), .regwrite(regwrite), .jump(jump),.alucontrol(alucontrol),.pc(pc), .zero(zero),
 	.instr(instr),.aluout(aluout), .writedata(writedata),.readdata(readdata));
 
 endmodule

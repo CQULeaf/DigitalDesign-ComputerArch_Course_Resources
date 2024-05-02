@@ -26,14 +26,15 @@ module datapath(
     input [31:0] instr,
     input [31:0] readdata,
     output [31:0] pc,
-    output [31:0] aluout, writedata
+    output [31:0] aluout, writedata,
+    output wire zero
 );
 
 // PC实现
 wire [31:0] adderPC, branchPC, PCnext_temp;
 adder adderPC_inst(.a(pc), .b(32'h4), .y(adderPC));
 // PC选择指令
-mux2 PC_select(.option1(adderPC), .option2(instr[25:0]), .select(pcsrc), .data(PCnext_temp));
+mux2 PC_select(.option1(adderPC), .option2(branchPC), .select(pcsrc), .data(PCnext_temp));
 // PC跳转
 wire [31:0] PCjump, PCnext;
 assign PCjump = {adderPC[31:28], instr[25:0], 2'b00};
@@ -52,7 +53,7 @@ mux2 select_dst(.option1({27'b0, instr[20:16]}), .option2({27'b0, instr[15:11]})
 // ALU
 wire [31:0] srcB;
 mux2 select_srcB(.option1(writedata), .option2(sign_extend), .select(alusrc), .data(srcB));
-ALU ALU_inst(.num1(srcA), .num2(srcB), .op(alucontrol), .ans(aluout));
-mux2 select_res(.option1(readdata), .option2(aluout), .select(memtoreg), .data(res));
+ALU ALU_inst(.num1(srcA), .num2(srcB), .op(alucontrol), .ans(aluout), .zero(zero));
+mux2 select_res(.option1(aluout), .option2(readdata), .select(memtoreg), .data(res));
 
 endmodule
