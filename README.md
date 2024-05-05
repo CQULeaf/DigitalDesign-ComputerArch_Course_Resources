@@ -1,39 +1,19 @@
-# Digital Design & Computer Architecture Odyssey: Spring 2023
+# 重庆大学计算机组成与结构课程
 
-Diving Deep into Digital Design &amp; Comp Arch Spring 2023 - My exploration of digital circuits and computer architecture, from the ground up. Follow my journey as I decode the design of modern microprocessors and embrace the hardware/software symphony!
+本仓库收录了本人在学习**计算机组成与结构**课程时所完成的**笔记**、**作业**、**实验**等内容。本着开源精神特地将所有原创资料整理至此，希望与所有学习这门课程的朋友一同进步。因个人能力有限难免有诸多瑕疵甚至错误，若在使用过程中发现，麻烦在**Issues**中提出！
 
-## 🎯 Course Objectives Unpacked
+## 资料分布说明
 
-This journey is not just about learning; it's about understanding the very fabric of computing:
+### 课程笔记
 
-- **The Basics**: We're not just scratching the surface; we're digging deep into the electrons of digital circuits.
-- **The Principles**: Discovering the laws that govern the architecture of computing, guiding our path to creating efficient, robust designs.
-- **The Precedents**: Standing on the shoulders of giants, we explore the landmarks in computer architecture that shape our modern computing landscape.
+- **DDCA Class Notes**：本人选择网课[ETH Zurich: Digital Design and Computer Architecture](https://safari.ethz.ch/digitaltechnik/spring2023/doku.php?id=start)作为辅助学习，文件夹内整理了听课时所做的笔记内容。
+  - 课程推荐：体系结构领域的大牛 **Onur Mutlu** 亲自来教学**数字电路**和**计算机体系结构**。课程完全从计算机设计的角度出发，从晶体管、逻辑门开始，一直讲解到微架构、缓存和虚拟内存，还会介绍很多体系结构领域最新的研究进展。课程使用**FPGA 开发板和 Vivado 软件**进行电路设计，从组合电路和时序电路开始，一直到最后部署一个完整的MIPS CPU。
 
-And through this exploration, we aim to:
+### 课程实验
 
-- Decode the inner workings of a modern computer.
-- Weigh the scales of design trade-offs.
-- Craft our very own microprocessor design.
-- Hone our debugging skills on increasingly complex systems.
-- Dare to dream up novel, innovative designs that push the boundaries.
-
-## 🛠 What's Inside This Repo
-
-- **Class Notes**: Take a peek into every lecture's & reading's discoveries, challenges, and eureka moments.
-- **Project Showcase**: Witness the birth of a microprocessor, from conception to implementation.
-- **Design Trade-offs**: Delve into the critical decisions that shape the future of computing.
-- **Resource Library**: A curated collection of external resources that have illuminated my path.
-
-## 🌌 Goals of This Galactic Quest
-
-- To build a solid foundation in the principles of digital design and computer architecture.
-- To transition from a theoretical understanding to practical, hands-on design and debugging prowess.
-- To contribute to the community of future architects who will design the computing platforms of tomorrow.
-- To document the journey, not just the destination, fostering a space for reflection and growth.
-
-## 🤝 Let's Connect
-
-Whether you're a fellow traveler, an experienced guide, or just curious about the world of computer architecture, I welcome your insights, feedback, and camaraderie. Feel free to open an issue, suggest improvements, or share your own stories of digital design and architecture.
-
-**Thank you for joining me on this exploratory voyage through the realms of digital design and computer architecture. Together, let's unlock the secrets of computing platforms, one circuit at a time!**
+- **CQU Lab**：2024年春季学期重庆大学计组实验
+  - **Design Sources**：每个实验所需的设计文件。
+  - **Simulation Sources**：每个实验所需的仿真文件。
+  - **Constraints**：每个实验所需的约束文件。
+  - **Other Files**：每个实验所需的其余必要文件。
+  - **Report**：每个实验报告书写对应的LaTeX文件。
