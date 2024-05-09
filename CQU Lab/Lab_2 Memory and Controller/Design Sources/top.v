@@ -19,40 +19,44 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-
 module top(
     input clk_in, rst,
-    output reg inst_ce,
-    output [31:0] pc,
-    output [31:0] inst,
-    output zero,
     output memtoreg, memwrite,
     output pcsrc, alusrc,
     output regdst, regwrite,
     output jump,
-    output [2:0] alucontrol
+    output [2:0] alucontrol,
+    output [6:0] seg,
+    output [7:0] ans
     );
+    
     wire clk;
-
+    wire zero;
+    wire [31:0] pc;
+    wire [31:0] inst;
+    wire [31:0] pc_next;
+    
     clk_div clk_div_inst(
         .clk_in(clk_in),
         .rst(rst),
         .hz(clk)
         );
+        
+     pc pc_update(
+        .clk(clk_in),
+        .rst(rst),
+        .pc(pc),
+        .newPC(pc_next)
+     );
 
     adder adder_inst(
         .pc(pc),
-        .pc_next(pc),
-        .clk(clk),
-        .rst(rst),
-        .inst_ce(inst_ce)
+        .pc_next(pc_next)
         );
 
     blk_mem_gen_0 blk_mem_gen_0_inst(
-        .clka(clk),
-        .wea(4'b0000),
-        .addra(pc[31:2]),
-        .dina(32'b0),
+        .clka(clk_in),
+        .addra(pc[6:3]),
         .douta(inst)
         );
 

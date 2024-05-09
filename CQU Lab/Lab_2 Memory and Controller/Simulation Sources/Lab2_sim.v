@@ -23,18 +23,13 @@
 module Lab2_sim();
     reg clk, rst;
     wire [2:0] alucontrol;
-    wire regwrite, regdst, jump, alusrc, pcsrc, memwrite, memtoreg, zero;
-    wire [5:0] op, funct;
-    wire inst_ce;
-    wire [31:0] pc, inst;
+    wire regwrite, regdst, jump, alusrc, pcsrc, memwrite, memtoreg;
+    wire [6:0] seg;
+    wire [7:0] ans;
 
     top top_inst(
         .clk_in(clk),
         .rst(rst),
-        .inst_ce(inst_ce),
-        .pc(pc),
-        .inst(inst),
-        .zero(zero),
         .memtoreg(memtoreg),
         .memwrite(memwrite),
         .pcsrc(pcsrc),
@@ -42,7 +37,9 @@ module Lab2_sim();
         .regdst(regdst),
         .regwrite(regwrite),
         .jump(jump),
-        .alucontrol(alucontrol)
+        .alucontrol(alucontrol),
+        .seg(seg),
+        .ans(ans)
     );
 
     always #5 clk = ~clk;
@@ -51,12 +48,6 @@ module Lab2_sim();
         clk = 1;
         rst = 1;
         #5 rst = 0;
-    end
-
-    // 在每个时钟周期打印指定的信息
-    always @(posedge clk) begin
-        $display("instruction: 32’h%h, zero: %b, memtoreg: %b, memwrite: %b, pcsrc: %b, alusrc: %b, regdst: %b, regwrite: %b, jump: %b, alucontrol: %b",
-                 inst, zero, memtoreg, memwrite, pcsrc, alusrc, regdst, regwrite, jump, alucontrol);
     end
 
 endmodule
