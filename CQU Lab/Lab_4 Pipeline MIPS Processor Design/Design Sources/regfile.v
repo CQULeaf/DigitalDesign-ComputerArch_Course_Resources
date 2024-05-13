@@ -29,7 +29,7 @@ module regfile(
 
 	reg [31:0] rf[31:0];
 
-	always @(posedge clk) begin
+	always @(*) begin
 		if(we3) begin
 			 rf[wa3] <= wd3;
 		end

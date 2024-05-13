@@ -25,12 +25,11 @@ module controller(
     output memtoreg, memwrite,
     output pcsrc, alusrc,
     output wire regdst, regwrite,
-    output jump,
+    output jump, branch,
     output [2:0] alucontrol
 );
     // 连接至相应端口
     wire [1:0] aluop;
-    wire branch;
 
     // 主解码器
     main_decoder md(

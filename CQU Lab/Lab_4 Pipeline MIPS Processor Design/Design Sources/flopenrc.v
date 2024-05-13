@@ -3,9 +3,9 @@
 // Company: 
 // Engineer: 
 // 
-// Create Date: 2024/04/30 21:25:15
+// Create Date: 2024/05/12 17:19:54
 // Design Name: 
-// Module Name: pc
+// Module Name: flopenrc
 // Project Name: 
 // Target Devices: 
 // Tool Versions: 
@@ -19,24 +19,23 @@
 // 
 //////////////////////////////////////////////////////////////////////////////////
 
-module pc(
-    input clk, rst, en, 
-    input wire [31:0] newPC,
-    output reg [31:0] pc
+
+module flopenrc #(parameter WIDTH = 8)
+(
+    input clk, rst, en, clear,
+    input [WIDTH-1:0] d,
+    output reg [WIDTH-1:0] q
 );
 
-    initial begin
-        pc <= 32'b00;
-    end
-
-    always @(posedge clk) begin
+    always @ (posedge clk) begin
         if (rst) begin
-            pc <= 0;
+            q <= 0;
         end
-        else if(en) begin
-            pc <= newPC;
+        else if (clear) begin
+            q <= 0;
         end
-            
+        else if (en) begin
+            q <= d;
+        end
     end
-
 endmodule
