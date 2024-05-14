@@ -26,7 +26,7 @@ module regfile(
 	input wire[31:0] wd3,
 	output wire[31:0] rd1,rd2
     );
-
+	
 	reg [31:0] rf[31:0];
 
 	always @(*) begin
