@@ -1,2 +1,41 @@
 \section{实验过程记录}
-记录实验的过程，完成了什么样的工作，存在的问题包括哪些，解决方案如何等。subsubsection名称自行设定。
+
+\subsection{问题1: 程序计数单元的实现}
+\textbf{问题描述：} 用 PC 模块和加法器共同构成一个完整的程序计数器功能单元。
+
+\textbf{解决方案：} PC 模块存储当前的程序计数器值并控制指令使能信号，而加法器模块用于计算下一个程序计数器值，每个时钟周期加 4。通过将这两个模块串联，实现了程序计数器在时钟信号下按照设定的增量递增的功能。在 adder 模块中实例化一个 PC 模块，可以确保在加法器模块内部的程序计数器值返回给 PC 中。
+
+\subsection{问题2: main\_decoder 模块译码}
+\textbf{问题描述：} main\_decoder 负责判断指令类型并生成相应的控制信号。输入的指令需要正确的对应输出。
+
+\textbf{解决方案：} 查询给出的附录文件（附录 A\_coe 文件涉及指令一查表.pdf），利用 \texttt{case} 语句根据文件给出正确的各控制信号的输出。
+
+\subsection{问题3: alu\_decoder 模块译码}
+\textbf{问题描述：} alu\_decoder 负责 ALU 模块控制信号的译码，需要配合 inst 低 6 位 funct，进行 ALU 模块控制信号的译码。
+
+\textbf{解决方案：} 同问题 2。查表后利用 \texttt{assign} 组合逻辑和判断语句给 alucontrol 赋值。
+
+\subsection{问题4: controller 中的额外端口输出}
+\textbf{问题描述：} 未存在于 controller 调用的两个模块中的 pcsrc 的设计。
+
+\textbf{解决方案：} 虽然该实验要求中未要求该端口，但考虑到完整性最终在 controller 中设计了该端口。利用 \texttt{assign} 赋值为 branch 和 zero 变量的逻辑与操作，实现端口的设计。
+
+\subsection{问题5: 指令存储器实现}
+\textbf{问题描述：} 使用 Block Memory Generator IP 构造指令存储器。
+
+\textbf{解决方案：} 根据指导书中的参考进行，导入给出的 coe 文件，并注意了地址深度的设置，此影响后续仿真和上板验证时的时间设置和指令循环。
+
+\subsection{问题6: 时钟分频}
+\textbf{问题描述：} 实验要求在七段数码管上自动显示指令。控制显示频率需要时钟分频。
+
+\textbf{解决方案：} \texttt{clk\_div} 模块内部定义了一个计数器 count。没有复位信号时递增计数器 count 的值。当计数器达到一定值时，输出信号翻转一次，并将 count 清零，从而实现了时钟信号的分频。
+
+\subsection{问题7: 仿真调试}
+\textbf{问题描述：} 自行编写 Testbench 仿真文件实现仿真。
+
+\textbf{解决方案：} 为实现仿真调试，需编写 Testbench 仿真文件并实例化 top 模块。设置时钟周期为 10ns，在每个时钟周期内输入地址 Address + 4，捕获输出信号并打印在控制台。通过运行仿真，可获得仿真图和控制台输出结果。
+
+\subsection{问题8: 约束文件实现}
+\textbf{问题描述：} 利用约束文件实现管脚配置。
+
+\textbf{解决方案：} 根据给出的 Nexys4 板子的约束文件做出调整，时钟连接板载时钟，rst 连接板上实体按键，七段数码管显示指令后上板观察验证是否无误。

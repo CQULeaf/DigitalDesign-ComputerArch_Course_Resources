@@ -1,2 +1,47 @@
 \section{实验过程记录}
-记录实验的过程，完成了什么样的工作，存在的问题包括哪些，解决方案如何等。subsubsection名称自行设定。
+
+\subsection{问题1: 设计 Datapath 模块连接}
+\textbf{问题描述：} 由给出的参考书得知 Datapath 模块的各个组成部分及其连接关系，因为 datapath 内的模块大多已给出或前述实验已完成，所以重点在需要详细分析各部分的功能和数据流向，确保模块之间的正确连接。
+
+\textbf{解决方案：}
+\begin{enumerate}
+    \item \textbf{PC 模块连接：}
+    \begin{itemize}
+        \item \texttt{adderPC\_inst} 实例化了一个加法器模块，用于将当前 PC 地址加上一个偏移量，得到下一个 PC 地址。
+        \item \texttt{mux2 PC\_select} 实例化了一个多路选择器模块，根据 \texttt{pcsrc} 信号选择下一个 PC 地址。
+        \item \texttt{PCnext\_inst} 实例化了一个多路选择器模块，根据 \texttt{jump} 信号选择是否跳转到指定地址。
+        \item \texttt{PC\_inst} 实例化了 PC 模块，用于存储并更新 PC 地址。
+    \end{itemize}
+    \item \textbf{Branch 计算和存储：}
+    \begin{itemize}
+        \item \texttt{sign\_extend\_inst} 实例化了一个符号扩展模块，将指令中的 16 位符号扩展成 32 位。
+        \item \texttt{adderBranch\_inst} 实例化了一个加法器模块，用于计算分支目标地址。
+    \end{itemize}
+    \item \textbf{寄存器文件和数据路径选择：}
+    \begin{itemize}
+        \item \texttt{regfile\_inst} 实例化了寄存器文件模块，用于读取和写入寄存器数据。
+        \item \texttt{mux2 select\_dst} 实例化了一个多路选择器模块，根据 \texttt{regdst} 信号选择写入的寄存器地址。
+    \end{itemize}
+    \item \textbf{ALU 计算和数据选择：}
+    \begin{itemize}
+        \item \texttt{select\_srcB} 实例化了一个多路选择器模块，根据 \texttt{alusrc} 信号选择 ALU 的第二个操作数。
+        \item \texttt{ALU\_inst} 实例化了一个 ALU 模块，用于执行算术逻辑运算。
+        \item \texttt{mux2 select\_res} 实例化了一个多路选择器模块，根据 \texttt{memtoreg} 信号选择 ALU 的输出或数据存储器的读取数据作为最终结果。
+    \end{itemize}
+    \item \textbf{其他连接：} 连接各个模块之间的数据和控制信号，确保正常的数据流和操作顺序。
+\end{enumerate}
+
+\subsection{问题2: 两个存储器实现}
+\textbf{问题描述：} 使用 Block Memory Generator IP 构造指令存储器。
+
+\textbf{解决方案：} 使用 IP 实例化数据存储器和指令存储器，配置不同的宽度和深度参数。指令存储器需要导入指定的 coe 文件以支持所需操作。
+
+\subsection{问题3: 端口适配}
+\textbf{问题描述：} 使其余模块端口适配顶层文件。
+
+\textbf{解决方案：} 由于 MIPS 软核顶层文件和设计顶层文件 \texttt{top} 均已给出，故修改了底层的各模块的输入输出端口，以适配顶层文件的调用需求。
+
+\subsection{问题4: 仿真调试}
+\textbf{问题描述：} 调用 \texttt{top} 模块进行仿真。
+
+\textbf{解决方案：} 根据已给出的仿真文件对实现的单周期 CPU 进行仿真，通过仿真图和控制台打印的输出判断仿真是否成功。
