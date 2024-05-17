@@ -1,19 +1,68 @@
 \section{实验设计}
-\textcolor{red}{这一节，主要描述各个模块的功能、接口、逻辑控制方法（状态机控制方法）等。(红字为内容说明，请删除)}
-\subsection{数据通路}\label{sub:datapath}
+\subsection{数据通路(datapath)}\label{sub:datapath}
 \subsubsection{功能描述}
-\textcolor{red}{简单描述实现的功能即可，一句话亦可(红字为内容说明，请删除)}
+计算机中用于执行指令的路径，它包含了各种功能模块（如寄存器、ALU、存储器等）以及它们之间的连接，实现了指令的操作流程和数据的传输。
 \subsubsection{接口定义}
-\textcolor{red}{接口定义请使用表格，需要包括\textbf{接口信号名、方向、宽度、含义}(红字为内容说明，请删除)}
-
 \begin{table}[htp]
-\caption{接口定义模版}\label{tab:signaldef}
-\begin{center}
-	\begin{tabular}{|l|l|l|p{6cm}|}
-	\hline
-	\textbf{信号名} & \textbf{方向} & \textbf{位宽} & \textbf{功能描述}\\ \hline \hline
-	valid			& Output& 1-bit & If CPU stopped or any exception happens, valid signal is set to 0.\\ 
-	\hline
-	\end{tabular}
-\end{center}
-\end{table}
+	\caption{数据通路接口定义}\label{tab:datapathdef}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{8cm}|}
+		\hline
+		\textbf{信号名} & \textbf{方向} & \textbf{宽度} & \textbf{含义}\\ \hline \hline
+		clk         & in  & 1  & 时钟信号 \\ 
+		rst         & in  & 1  & 复位信号 \\ 
+		memstoreg   & in  & 1  & 回写的数据来自于 ALU 或者存储器 \\ 
+		memwrite    & in  & 1  & 是否要书写数据存储器 \\ 
+		pcsrc       & in  & 1  & 下一个 PC 是 CP+4 还是新地址 \\ 
+		alusrc      & in  & 1  & 送入的是立即数的 32 位扩展还是寄存器堆读取的值 \\ 
+		regdst      & in  & 1  & 写入寄存器堆的是 rt 还是 rd \\ 
+		regwrite    & in  & 1  & 是否书写寄存器堆 \\ 
+		jump        & in  & 1  & 跳转指令 \\ 
+		alucontrol  & in  & 3  & 指令结果 \\ 
+		instr       & in  & 32 & 指令码 \\ 
+		readdata    & in  & 32 & 从存储器读取的数据 \\ 
+		pc          & out & 32 & 程序计数器的地址 \\ 
+		aluout      & out & 32 & 算术逻辑单元的计算结果 \\ 
+		writedata   & out & 32 & 要写入存储器的数据 \\ 
+		zero        & out & 1  & 是否为 0 \\ 
+		\hline
+		\end{tabular}
+	\end{center}
+	\end{table}
+\subsubsection{逻辑控制}
+Datapath将pc,mux2,pc\_inst,branch,reg,alu等结合起来，
+代码的思路是构建一个能够执行MIPS指令的数据路径。
+数据路径包括指令的取值、解码、执行和写回阶段。
+PC用于跟踪下一条指令的地址，寄存器堆用于存储操作数和结果，ALU执行计算，多路选择器用于选择数据来源和写回的目的地。
+整个数据路径由多个组合逻辑和时序逻辑组件组成，它们在时钟信号的控制下协同工作以执行指令。
+
+\subsection{寄存器堆(Regfile)}\label{sub:regfile}
+\subsubsection{功能描述}
+一个小型、高速存储单元集合，用于在处理器执行指令过程中临时存储操作数和中间结果。
+\subsubsection{接口定义}
+\begin{table}[htp]
+	\caption{寄存器堆接口定义}\label{tab:regfile}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{8cm}|}
+		\hline
+		\textbf{接口信号名} & \textbf{方向} & \textbf{宽度} & \textbf{含义}\\ \hline \hline
+		clk & 输入 & 1 & 时钟信号，用于同步寄存器文件的操作 \\ 
+		we3 & 输入 & 1 & 写使能信号，为1时允许写操作 \\ 
+		ra1 & 输入 & 5 & 第一个读地址，用于选择第一个源寄存器 \\ 
+		ra2 & 输入 & 5 & 第二个读地址，用于选择第二个源寄存器 \\ 
+		wa3 & 输入 & 5 & 写地址，用于选择写回的寄存器 \\ 
+		wd3 & 输入 & 32 & 写数据，将要写入寄存器的数据 \\ 
+		rd1 & 输出 & 32 & 第一个读数据，来自第一个源寄存器的值 \\ 
+		rd2 & 输出 & 32 & 第二个读数据，来自第二个源寄存器的值 \\ 
+		\hline
+		\end{tabular}
+	\end{center}
+	\end{table}
+\subsubsection{逻辑控制}
+在 \texttt{regfile} 模块的逻辑控制部分，重点控制逻辑如下：
+
+\begin{enumerate}
+    \item 写控制：当写使能信号 \texttt{we3} 为高时，在时钟信号 \texttt{clk} 的上升沿，将输入数据 \texttt{wd3} 写入由写地址 \texttt{wa3} 指定的寄存器中。
+
+    \item 读控制：读操作是组合逻辑，不受时钟控制。当读地址 \texttt{ra1} 或 \texttt{ra2} 不为 0 时，分别从寄存器文件 \texttt{rf} 中读取对应地址的寄存器值输出到 \texttt{rd1} 或 \texttt{rd2}；如果读地址为 0，则输出 0，这是因为寄存器 0（\texttt{\$zero}）在 MIPS 架构中是硬连线为 0 的寄存器。
+\end{enumerate}
