@@ -1,19 +1,119 @@
 \section{实验设计}
-\textcolor{red}{这一节，主要描述各个模块的功能、接口、逻辑控制方法（状态机控制方法）等。(红字为内容说明，请删除)}
+\subsection{数据通路模块}\label{sub:Datapath}
+\subsubsection{功能描述}
+该datapath模块实现了MIPS微处理器的数据通路，包括取指、译码、执行、访存和写回等五个阶段的功能。
+它能够根据指令执行算术逻辑操作、控制指令的分支跳转、处理数据的前递和冒险以及控制指令的流水线执行。
+\subsubsection{接口定义}
+\begin{table}[htp]
+	\caption{数据通路接口定义}\label{tab:Datapathdef}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{8cm}|}
+		\hline
+		\textbf{信号名} & \textbf{方向} & \textbf{宽度} & \textbf{含义}\\ \hline \hline
+		clk        & 输入  & 1  & 时钟信号 \\ 
+		rst        & 输入  & 1  & 异步复位信号 \\ 
+		pcF        & 输出  & 32 & 取指阶段的程序计数器输出 \\ 
+		instrD     & 输入  & 32 & 译码阶段的指令输入 \\ 
+		regwriteD  & 输入  & 1  & 译码阶段的寄存器写使能信号 \\ 
+		memtoregD  & 输入  & 1  & 译码阶段的内存到寄存器选择信号 \\ 
+		branchD    & 输入  & 1  & 译码阶段的分支控制信号 \\ 
+		memwriteD  & 输入  & 1  & 译码阶段的内存写使能信号 \\ 
+		jumpD      & 输入  & 1  & 译码阶段的跳转控制信号 \\ 
+		regdstD    & 输入  & 1  & 译码阶段的寄存器目标选择信号 \\ 
+		alusrcD    & 输入  & 1  & 译码阶段的 ALU 源选择信号 \\ 
+		pcsrcD      & 输入  & 1  & 译码阶段的程序计数器源选择信号 \\ 
+		alucontrolID & 输入  & 3  & 译码阶段的 ALU 控制信号 \\ 
+		equalID     & 输出  & 1  & 译码阶段的比较结果输出 \\ 
+		op          & 输出  & 6  & 译码阶段的指令操作码输出 \\ 
+		funct       & 输出  & 6  & 译码阶段的指令功能码输出 \\ 
+		stallID     & 输出  & 1  & 译码阶段的流水线暂存信号 \\ 
+		readdataM   & 输入  & 32 & 访存阶段的内存读数据输入 \\ 
+		writedataM  & 输出  & 32 & 访存阶段的内存写数据输出 \\ 
+		aluoutM     & 输出  & 32 & 访存阶段的 ALU 输出 \\ 
+		memwriteM   & 输出  & 1  & 访存阶段的内存写使能信号 \\ 
+		\hline
+		\end{tabular}
+	\end{center}
+	\end{table}
+\subsubsection{逻辑控制}
+\begin{enumerate}
+	\item \textbf{写控制}：当写使能信号 \texttt{we3} 为高时，在时钟信号 \texttt{clk} 的上升沿，将输入数据 \texttt{wd3} 写入由写地址 \texttt{wa3} 指定的寄存器。
+	\item \textbf{读控制}：读操作是组合逻辑，不受时钟控制。当读地址 \texttt{ra1} 或 \texttt{ra2} 不为 0 时，分别从寄存器文件 \texttt{rf} 中读取对应地址的寄存器值输出到 \texttt{rd1} 或 \texttt{rd2}；如果读地址为 0，则输出 0，这是因为寄存器 0（\texttt{\$zero}）在 MIPS 架构中是硬连线为 0 的寄存器。
+\end{enumerate}
+\subsection{触发器(flopenrc)模块}\label{sub:flopenrc}
+\subsubsection{功能描述}
+一个具有异步复位和清除功能的寄存器，能够根据时钟信号、异步复位信号、清除信号和使能信号来更新其输出值。
+\subsubsection{接口定义}
+\begin{table}[htp]
+	\caption{触发器接口定义}\label{tab:flopdef}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{8cm}|}
+		\hline
+		\textbf{信号名} & \textbf{方向} & \textbf{宽度} & \textbf{含义}\\ \hline \hline
+		clk    & 输入  & 1         & 时钟信号 \\ 
+		rst    & 输入  & 1         & 异步复位信号 \\ 
+		en     & 输入  & 1         & 使能信号 \\ 
+		clear  & 输入  & 1         & 清除信号 \\ 
+		d      & 输入  & WIDTH-1:0 & 数据输入 \\ 
+		q      & 输出  & WIDTH-1:0 & 寄存器输出 \\ 
+		\hline
+		\end{tabular}
+	\end{center}
+	\end{table}
+\subsubsection{逻辑控制}
+\begin{enumerate}
+    \item \textbf{复位逻辑}：当 \texttt{rst} 信号为高电平时，无论 \texttt{en} 和 \texttt{clear} 信号的状态如何，寄存器的输出 \texttt{q} 将被重置为 0。
+    \item \textbf{清除逻辑}：当 \texttt{clear} 信号为高电平时，无论 \texttt{en} 信号的状态如何，寄存器的输出 \texttt{q} 将被重置为 0。
+    \item \textbf{使能逻辑}：当 \texttt{en} 信号为高电平时，寄存器的输出 \texttt{q} 将更新为输入 \texttt{d} 的值。
+\end{enumerate}
+
+\textbf{优化逻辑}：包括使用异步复位和清除信号来快速初始化寄存器状态，以及确保在时钟上升沿时执行更新操作，以避免亚稳态问题。
 \subsection{冒险处理模块}\label{sub:hazard}
 \subsubsection{功能描述}
-\textcolor{red}{简单描述实现的功能即可，一句话亦可(红字为内容说明，请删除)}
+用于检测和处理流水线中的数据冒险和控制冒险。
 \subsubsection{接口定义}
-\textcolor{red}{接口定义请使用表格，需要包括\textbf{接口信号名、方向、宽度、含义}(红字为内容说明，请删除)}
-
 \begin{table}[htp]
-\caption{接口定义模版}\label{tab:signaldef}
-\begin{center}
-	\begin{tabular}{|l|l|l|p{6cm}|}
-	\hline
-	\textbf{信号名} & \textbf{方向} & \textbf{位宽} & \textbf{功能描述}\\ \hline \hline
-	valid			& Output& 1-bit & If CPU stopped or any exception happens, valid signal is set to 0.\\ 
-	\hline
-	\end{tabular}
-\end{center}
-\end{table}
+	\caption{冒险接口定义}\label{tab:hazarddef}
+	\begin{center}
+		\begin{tabular}{|l|l|l|p{8cm}|}
+		\hline
+		\textbf{信号名} & \textbf{方向} & \textbf{宽度} & \textbf{含义}\\ \hline \hline
+		rsE        & 输入  & 5  & EX阶段寄存器读取源E \\ 
+		rtE        & 输入  & 5  & EX阶段寄存器读取源E \\ 
+		writeregM  & 输入  & 5  & MEM阶段写寄存器地址 \\ 
+		writeregW  & 输入  & 5  & WB阶段写寄存器地址 \\ 
+		rsD        & 输入  & 5  & DEC阶段寄存器读取源D \\ 
+		rtD        & 输入  & 5  & DEC阶段寄存器读取源D \\ 
+		regwriteM  & 输入  & 1  & MEM阶段寄存器写使能 \\ 
+		regwriteW  & 输入  & 1  & WB阶段寄存器写使能 \\ 
+		memtoregE  & 输入  & 1  & EX阶段内存到寄存器选择 \\ 
+		forwardAE  & 输出  & 2  & EX阶段ALU数据前推 \\ 
+		forwardBE  & 输出  & 2  & EX阶段ALU数据前推 \\ 
+		stallF     & 输出  & 1  & FETCH阶段流水线暂停 \\ 
+		stallID    & 输出  & 1  & DECODE阶段流水线暂停 \\ 
+		\hline
+		\end{tabular}
+	\end{center}
+	\end{table}
+\subsubsection{逻辑控制}
+\begin{enumerate}
+    \item \textbf{数据前推逻辑}：
+    \begin{itemize}
+        \item \texttt{forwardAE} 和 \texttt{forwardBE}：根据 EX 阶段的寄存器读取源和 MEM/WB 阶段的写寄存器地址，确定 ALU 数据的前推方向。
+        \item \texttt{forwardAD} 和 \texttt{forwardBD}：根据 DEC 阶段的寄存器读取源和 EX 阶段的写寄存器地址，确定 ALU 数据的前推方向。
+    \end{itemize}
+
+    \item \textbf{流水线暂停逻辑}：
+    \begin{itemize}
+        \item \texttt{stallF}：当 EX 阶段的读取源与 MEM/WB 阶段的写寄存器地址匹配时，暂停 FETCH 阶段的流水线。
+        \item \texttt{stallD}：当 DECODE 阶段的读取源与 EX 阶段的写寄存器地址匹配时，暂停 DECODE 阶段的流水线。
+    \end{itemize}
+
+    \item \textbf{清除流水线逻辑}：
+    \begin{itemize}
+        \item \texttt{flushE}：当检测到数据冒险或控制冒险时，清除流水线，防止错误的数据流过。
+    \end{itemize}
+    
+\end{enumerate}
+
+\textbf{优化逻辑}：包括使用更复杂的检测机制来处理更多的冒险情况，以及确保在检测到冒险时及时清除流水线。

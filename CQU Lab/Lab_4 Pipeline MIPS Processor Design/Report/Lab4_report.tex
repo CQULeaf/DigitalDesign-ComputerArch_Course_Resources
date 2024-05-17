@@ -2,6 +2,33 @@
 \documentclass[cn,normal,black,11pt]{elegantnote}
 \usepackage{wasysym}
 \usepackage{multirow}
+\usepackage{geometry}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstset{
+    language=Verilog,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{blue},
+    commentstyle=\color{gray},
+    stringstyle=\color{red},
+    numberstyle=\tiny\color{gray},
+    stepnumber=1,
+    numbersep=5pt,
+    backgroundcolor=\color{white},
+    showspaces=false,
+    showstringspaces=false,
+    showtabs=false,
+    frame=single,
+    tabsize=2,
+    captionpos=b,
+    breaklines=true,
+    breakatwhitespace=false,
+    title=\lstname,
+    escapeinside={\%*}{*)},
+    morekeywords={input, output, wire, reg, module, endmodule, assign}
+}
+
 % \title{ElegantNote：一个优美的 \LaTeX{} 笔记模板}
 
 % \author{\href{https://ddswhu.me/}{邓东升}}
