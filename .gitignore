@@ -39,6 +39,8 @@
 *.ilg
 *.ind
 *.tdo
+*.bcf
+*.xml
 # Exclude .pdf files if you don't want to track them
 # *.pdf
 # Exclude TeXstudio project files

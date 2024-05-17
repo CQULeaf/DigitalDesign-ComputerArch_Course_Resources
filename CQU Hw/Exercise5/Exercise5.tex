@@ -1,0 +1,101 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 载入模版
+%
+% 载入csuthesis.cls文件定义的模板
+% 支持选项，forprint（黑白打印模式）
+% 载入主体内容样式与参考文献样式
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 选项
+%   type=[bachelor|research|translation],                 % 可选（默认：bachelor），论文类型（学位or课程/调研报告/文献翻译）
+%   output=[print|electronic],                            % 可选（默认：print），输出要求（电子版/打印）
+\documentclass[type=bachelor, output=electronic, fontset=none]{csuthesis}
+% 来自https://github.com/hushidong/biblatex-gb7714-2015
+% 参考文献 gb7714-2015 支持宏包
+% 使用了biblatex-gb7714-2015宏包，指定后端为biber
+\usepackage[backend=biber,style=gb7714-2015,gbnamefmt=uppercase,gbpub=false,gbpunctin=false,gbalign=gb7714-2015]{biblatex}
+% 重定义参考文献字体为楷体GB_2312 字号5号
+\renewcommand{\bibfont}{\zihao{5} \kgb}
+% 导入参考文献数据库
+\addbibresource{Exercise5.bib}
+% 按照章节(chapter)标注图片和表格序号，亦可根据需要改为section等
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+
+% 公式、图片、表格序号改成(1-1)的形式
+
+% \renewcommand{\theequation}{\arabic{equation}}
+% \renewcommand\thefigure{\arabic{figure}}
+% \renewcommand\thetable{\arabic{table}}
+
+
+\renewcommand\theequation{\arabic{chapter}-\arabic{equation}}
+\renewcommand\thefigure{\arabic{chapter}-\arabic{figure}}
+\renewcommand\thetable{\arabic{chapter}-\arabic{table}}
+
+% 各级小标题前后间距：前后各一个字符，首行缩进俩字符
+% \titlespacing{\section}{0pt}{2.5ex plus 1ex minus .2ex}{1.3ex plus .2ex}
+% \titlespacing{\section}{2em}{*0.5}{*0.5}
+% \titlespacing{\subsection}{2em}{*0}{*0}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 基本信息
+%
+% 用户自行输入标题、作者等基本信息
+% 都存储在\content\info.tex文件中
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{Exercise5_info}
+
+
+\begin{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 封面绘制
+%
+% 1.5版本重新编写了封面绘制宏，并用latex使用者更习惯的
+% \maketitle代替之前的\makecoverpage
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\maketitle
+
+% 启用大罗马字母进行编号
+\frontmatter
+% 设置页眉和页脚
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 中文摘要
+%
+% 存储在\content\abstractzh.tex文件中
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\include{Exercise5_abstract}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 目录
+%
+% 使用重定义的tableofcontents宏绘制目录
+% 满足学校的样式要求
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\tableofcontents
+
+
+% 启用数字编号，改为第 x 页  共 x 页格式
+\mainmatter
+
+
+% 正文
+\include{Exercise5_content}
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 参考文献
+%
+% 编译过程自动生成参考文献
+% 根据学校要求文中引用的文献应依次编序，
+% 其序号用方括号括起，如[5]、[6]，置于右上角。
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 由于参考文献不是chapter，这句把参考文献加入目录
+% \addcontentsline{toc}{chapter}{参考文献} 
+\printbibliography
+\newpage
+
+\end{document}
